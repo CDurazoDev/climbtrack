@@ -15,5 +15,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../ClimbTrack.Application/ClimbTrack.Application.csproj" />
+    <ProjectReference Include="../ClimbTrack.Infrastructure/ClimbTrack.Infrastructure.csproj" />
   </ItemGroup>
 </Project>
