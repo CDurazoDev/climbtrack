@@ -91,6 +91,9 @@ artifacts/
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
 
+# Local app settings (do not commit secrets)
+apps/api/ClimbTrack.Api/appsettings.Development.json
+
 # StyleCop
 StyleCopReport.xml
 
