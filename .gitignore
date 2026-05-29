@@ -93,6 +93,8 @@ ScaffoldingReadMe.txt
 
 # Local app settings (do not commit secrets)
 apps/api/ClimbTrack.Api/appsettings.Development.json
+apps/mobile/.env
+apps/mobile/.env.*
 
 # StyleCop
 StyleCopReport.xml
