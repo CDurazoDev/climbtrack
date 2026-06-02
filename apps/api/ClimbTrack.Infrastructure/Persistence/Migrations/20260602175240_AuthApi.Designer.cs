@@ -3,6 +3,7 @@ using System;
 using ClimbTrack.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ClimbTrack.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ClimbTrackDbContext))]
-    partial class ClimbTrackDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260602175240_AuthApi")]
+    partial class AuthApi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

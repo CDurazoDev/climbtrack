@@ -14,6 +14,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.Id).HasColumnName("id");
         builder.Property(x => x.Email).HasColumnName("email").HasMaxLength(320).IsRequired();
         builder.Property(x => x.Name).HasColumnName("name").HasMaxLength(100).IsRequired();
+        builder.Property(x => x.PasswordHash).HasColumnName("password_hash").HasMaxLength(512).IsRequired();
         builder.Property(x => x.Role).HasColumnName("role").HasMaxLength(20).IsRequired();
         builder.Property(x => x.DifficultyLevelId).HasColumnName("difficulty_level_id").IsRequired();
         builder.Property(x => x.PreferredLocale).HasColumnName("preferred_locale").HasMaxLength(5).IsRequired();

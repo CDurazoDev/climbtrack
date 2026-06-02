@@ -16,3 +16,4 @@ Monorepo base for the climbing and bouldering training app.
 - Use `apps/api/ClimbTrack.Api/appsettings.Development.example.json` as the template.
 - For design-time EF commands, prefer setting `CLIMBTRACK_PG` in your local environment.
 - For Flutter, pass sensitive values with `--dart-define` such as `API_BASE_URL` and `SENTRY_DSN`; do not commit local `.env` files.
+- For local infrastructure, copy `infra/.env.example` to `infra/.env` and set private values there.
