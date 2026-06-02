@@ -1,9 +1,10 @@
+using ClimbTrack.Application.Common.Interfaces;
 using ClimbTrack.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClimbTrack.Infrastructure.Persistence;
 
-public class ClimbTrackDbContext : DbContext
+public class ClimbTrackDbContext : DbContext, IApplicationDbContext
 {
     public ClimbTrackDbContext(DbContextOptions<ClimbTrackDbContext> options) : base(options) { }
 
@@ -16,6 +17,7 @@ public class ClimbTrackDbContext : DbContext
     public DbSet<SessionBlockItem> SessionBlockItems => Set<SessionBlockItem>();
 
     public DbSet<User> Users => Set<User>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<UserPlan> UserPlans => Set<UserPlan>();
     public DbSet<UserPlanWeek> UserPlanWeeks => Set<UserPlanWeek>();
     public DbSet<UserSessionLog> UserSessionLogs => Set<UserSessionLog>();
