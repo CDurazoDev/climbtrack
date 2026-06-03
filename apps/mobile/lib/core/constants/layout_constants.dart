@@ -1,0 +1,10 @@
+const double kPaddingH = 20.0;
+const double kPaddingTop = 48.0;
+const double kGapSm = 8.0;
+const double kGapMd = 16.0;
+const double kGapLg = 24.0;
+const double kRadiusSm = 8.0;
+const double kRadiusMd = 12.0;
+const double kRadiusLg = 16.0;
+const double kRadiusXl = 20.0;
+const double kBottomNavH = 72.0;
