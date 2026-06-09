@@ -1,4 +1,7 @@
+using ClimbTrack.Application.Common.Interfaces;
+using ClimbTrack.Application.Common.Security;
 using ClimbTrack.Domain.Interfaces;
+using ClimbTrack.Infrastructure.Auth;
 using ClimbTrack.Infrastructure.Persistence;
 using ClimbTrack.Infrastructure.Persistence.Interceptors;
 using ClimbTrack.Infrastructure.Services;
@@ -16,6 +19,9 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         services.TryAddScoped<ICurrentUserService, AnonymousCurrentUserService>();
+        services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ClimbTrackDbContext>());
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<RlsInterceptor>();
 
         services.AddDbContext<ClimbTrackDbContext>((sp, options) =>
