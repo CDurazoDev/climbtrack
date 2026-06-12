@@ -2,6 +2,8 @@ using System.Text;
 using ClimbTrack.Api.Endpoints.Auth;
 using ClimbTrack.Application;
 using ClimbTrack.Infrastructure;
+using ClimbTrack.Infrastructure.Persistence;
+using ClimbTrack.Infrastructure.Persistence.Seeds;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -37,6 +39,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    await using var scope = app.Services.CreateAsyncScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ClimbTrackDbContext>();
+    await CatalogSeeder.SeedAsync(dbContext);
 }
 
 app.UseAuthentication();
