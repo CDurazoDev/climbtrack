@@ -132,14 +132,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       : const Text('Iniciar sesion'),
                 ),
                 const SizedBox(height: 20),
-                Row(
+                const Row(
                   children: [
-                    const Expanded(child: Divider()),
+                    Expanded(child: Divider()),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      padding: EdgeInsets.symmetric(horizontal: 12),
                       child: Text('o', style: AppTypography.bodySm),
                     ),
-                    const Expanded(child: Divider()),
+                    Expanded(child: Divider()),
                   ],
                 ),
                 const SizedBox(height: 20),
