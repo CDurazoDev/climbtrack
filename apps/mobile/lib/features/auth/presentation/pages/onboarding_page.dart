@@ -136,13 +136,13 @@ class _SlideContent extends StatelessWidget {
             borderRadius: BorderRadius.circular(32),
             gradient: LinearGradient(
               colors: [
-                slide.accentColor.withOpacity(0.20),
-                slide.accentColor.withOpacity(0.04),
+                slide.accentColor.withValues(alpha: 0.20),
+                slide.accentColor.withValues(alpha: 0.04),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            border: Border.all(color: slide.accentColor.withOpacity(0.25)),
+            border: Border.all(color: slide.accentColor.withValues(alpha: 0.25)),
           ),
           child: Icon(slide.icon, size: 92, color: slide.accentColor),
         ),

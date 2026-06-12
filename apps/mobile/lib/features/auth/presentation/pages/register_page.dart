@@ -74,7 +74,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
+                const Text(
                   'Crea tu cuenta',
                   style: AppTypography.headingLg,
                 ),
@@ -137,7 +137,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   },
                 ),
                 const SizedBox(height: 24),
-                Text('Nivel', style: AppTypography.headingSm),
+                const Text('Nivel', style: AppTypography.headingSm),
                 const SizedBox(height: 12),
                 Row(
                   children: [

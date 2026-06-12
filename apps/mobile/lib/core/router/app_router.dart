@@ -11,7 +11,7 @@ import '../../features/dashboard/presentation/pages/dashboard_page.dart';
 final appRouterProvider = Provider<GoRouter>((ref) {
   final routerNotifier = _RouterNotifier();
   ref.listen<AsyncValue<AuthState>>(authStateProvider, (_, __) {
-    routerNotifier.notifyListeners();
+    routerNotifier.refresh();
   });
   ref.onDispose(routerNotifier.dispose);
 
@@ -63,4 +63,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   );
 });
 
-class _RouterNotifier extends ChangeNotifier {}
+class _RouterNotifier extends ChangeNotifier {
+  void refresh() {
+    notifyListeners();
+  }
+}
