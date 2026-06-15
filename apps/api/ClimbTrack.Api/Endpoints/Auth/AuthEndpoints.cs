@@ -54,7 +54,9 @@ public static class AuthEndpoints
         CancellationToken ct)
     {
         var result = await mediator.Send(command, ct);
-        return result.IsSuccess ? Results.Ok(result.Value) : Results.Unauthorized();
+        return result.IsSuccess
+            ? Results.Ok(result.Value)
+            : Results.Problem(result.Error, statusCode: StatusCodes.Status401Unauthorized);
     }
 
     private static async Task<IResult> Refresh(
@@ -63,7 +65,9 @@ public static class AuthEndpoints
         CancellationToken ct)
     {
         var result = await mediator.Send(command, ct);
-        return result.IsSuccess ? Results.Ok(result.Value) : Results.Unauthorized();
+        return result.IsSuccess
+            ? Results.Ok(result.Value)
+            : Results.Problem(result.Error, statusCode: StatusCodes.Status401Unauthorized);
     }
 
     private static async Task<IResult> Logout(
@@ -71,7 +75,9 @@ public static class AuthEndpoints
         ISender mediator,
         CancellationToken ct)
     {
-        await mediator.Send(command, ct);
-        return Results.NoContent();
+        var result = await mediator.Send(command, ct);
+        return result.IsSuccess
+            ? Results.NoContent()
+            : Results.Problem(result.Error, statusCode: StatusCodes.Status400BadRequest);
     }
 }
