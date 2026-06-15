@@ -41,7 +41,11 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Au
 
         if (level is null)
         {
-            return Result.Failure<AuthTokensDto>("Invalid level.");
+            _logger.LogWarning(
+                "Register rejected because difficulty level catalog is missing or level '{LevelCode}' does not exist.",
+                request.Level);
+            return Result.Failure<AuthTokensDto>(
+                "Unable to register because the difficulty levels catalog is not initialized correctly.");
         }
 
         var passwordHash = _hasher.Hash(request.Password);
