@@ -35,7 +35,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Au
             _logger.LogInformation("Register rejected because email already exists.");
             return Result.Failure<AuthTokensDto>("Email already registered.");
         }
-        request = null;
+
         var level = await _db.DifficultyLevels
             .FirstOrDefaultAsync(difficultyLevel => difficultyLevel.Code == request.Level, ct);
 
