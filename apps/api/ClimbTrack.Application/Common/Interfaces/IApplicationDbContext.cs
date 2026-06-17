@@ -9,6 +9,7 @@ public interface IApplicationDbContext
     DbSet<User> Users { get; }
     DbSet<DifficultyLevel> DifficultyLevels { get; }
     DbSet<RefreshToken> RefreshTokens { get; }
+    DbSet<PasswordResetToken> PasswordResetTokens { get; }
     DatabaseFacade Database { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

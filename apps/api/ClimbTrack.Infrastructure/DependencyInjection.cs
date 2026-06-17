@@ -2,6 +2,7 @@ using ClimbTrack.Application.Common.Interfaces;
 using ClimbTrack.Application.Common.Security;
 using ClimbTrack.Domain.Interfaces;
 using ClimbTrack.Infrastructure.Auth;
+using ClimbTrack.Infrastructure.Messaging;
 using ClimbTrack.Infrastructure.Persistence;
 using ClimbTrack.Infrastructure.Persistence.Interceptors;
 using ClimbTrack.Infrastructure.Services;
@@ -22,6 +23,9 @@ public static class DependencyInjection
         services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ClimbTrackDbContext>());
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IPasswordResetTokenService, PasswordResetTokenService>();
+        services.AddScoped<IPasswordResetNotificationService, PasswordResetNotificationService>();
+        services.AddScoped<IEmailSender, SmtpEmailSender>();
         services.AddScoped<RlsInterceptor>();
 
         services.AddDbContext<ClimbTrackDbContext>((sp, options) =>

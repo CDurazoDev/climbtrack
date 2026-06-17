@@ -50,5 +50,11 @@ public class User
     public DateTime CreatedAt { get; private set; }
     public bool IsActive { get; private set; } = true;
     public ICollection<RefreshToken> RefreshTokens { get; private set; } = [];
+    public ICollection<PasswordResetToken> PasswordResetTokens { get; private set; } = [];
+
+    public void SetPasswordHash(string passwordHash)
+    {
+        PasswordHash = passwordHash;
+    }
 }
 

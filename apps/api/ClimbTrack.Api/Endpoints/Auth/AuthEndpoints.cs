@@ -1,7 +1,9 @@
+using ClimbTrack.Application.Features.Auth.Commands.ForgotPassword;
 using ClimbTrack.Application.Features.Auth.Commands.Login;
 using ClimbTrack.Application.Features.Auth.Commands.Logout;
 using ClimbTrack.Application.Features.Auth.Commands.RefreshToken;
 using ClimbTrack.Application.Features.Auth.Commands.Register;
+using ClimbTrack.Application.Features.Auth.Commands.ResetPassword;
 using ClimbTrack.Application.Features.Auth.Dtos;
 using MediatR;
 
@@ -17,11 +19,24 @@ public static class AuthEndpoints
             .Produces<AuthTokensDto>(StatusCodes.Status201Created)
             .ProducesValidationProblem();
 
+        group.MapPost("/forgot-password", ForgotPassword)
+            .WithName("Auth_ForgotPassword")
+            .AllowAnonymous()
+            .Produces<StatusMessageDto>()
+            .ProducesValidationProblem();
+
         group.MapPost("/login", Login)
             .WithName("Auth_Login")
             .AllowAnonymous()
             .Produces<AuthTokensDto>()
             .ProducesProblem(StatusCodes.Status401Unauthorized);
+
+        group.MapPost("/reset-password", ResetPassword)
+            .WithName("Auth_ResetPassword")
+            .AllowAnonymous()
+            .Produces<StatusMessageDto>()
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesValidationProblem();
 
         group.MapPost("/refresh", Refresh)
             .WithName("Auth_Refresh")
@@ -78,6 +93,28 @@ public static class AuthEndpoints
         var result = await mediator.Send(command, ct);
         return result.IsSuccess
             ? Results.NoContent()
+            : Results.Problem(result.Error, statusCode: StatusCodes.Status400BadRequest);
+    }
+
+    private static async Task<IResult> ForgotPassword(
+        ForgotPasswordCommand command,
+        ISender mediator,
+        CancellationToken ct)
+    {
+        var result = await mediator.Send(command, ct);
+        return result.IsSuccess
+            ? Results.Ok(new StatusMessageDto("If the account exists, you will receive password reset instructions by email."))
+            : Results.Problem(result.Error, statusCode: StatusCodes.Status400BadRequest);
+    }
+
+    private static async Task<IResult> ResetPassword(
+        ResetPasswordCommand command,
+        ISender mediator,
+        CancellationToken ct)
+    {
+        var result = await mediator.Send(command, ct);
+        return result.IsSuccess
+            ? Results.Ok(new StatusMessageDto("Password updated successfully. Please sign in again."))
             : Results.Problem(result.Error, statusCode: StatusCodes.Status400BadRequest);
     }
 }

@@ -18,6 +18,7 @@ public class ClimbTrackDbContext : DbContext, IApplicationDbContext
 
     public DbSet<User> Users => Set<User>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+    public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
     public DbSet<UserPlan> UserPlans => Set<UserPlan>();
     public DbSet<UserPlanWeek> UserPlanWeeks => Set<UserPlanWeek>();
     public DbSet<UserSessionLog> UserSessionLogs => Set<UserSessionLog>();
