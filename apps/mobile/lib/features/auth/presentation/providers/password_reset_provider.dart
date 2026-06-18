@@ -74,7 +74,7 @@ class PasswordResetNotifier extends AsyncNotifier<PasswordResetState> {
       (failure) => AsyncValue.data(PasswordResetState.error(failure.message)),
       (_) => const AsyncValue.data(
         PasswordResetState.success(
-          'Si la cuenta existe, recibiras instrucciones por correo.',
+          'Si la cuenta existe, recibirás instrucciones por correo.',
         ),
       ),
     );
@@ -95,7 +95,7 @@ class PasswordResetNotifier extends AsyncNotifier<PasswordResetState> {
       (failure) => AsyncValue.data(PasswordResetState.error(failure.message)),
       (_) => const AsyncValue.data(
         PasswordResetState.success(
-          'Contrasena actualizada. Inicia sesion nuevamente.',
+          'Contraseña actualizada. Inicia sesión nuevamente.',
         ),
       ),
     );

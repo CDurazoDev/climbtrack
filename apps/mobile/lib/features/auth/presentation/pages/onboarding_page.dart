@@ -24,14 +24,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
       icon: Icons.timeline_rounded,
     ),
     _OnboardingSlide(
-      title: 'Cada sesion, registrada',
-      subtitle: 'Registra metricas especificas de cada tipo de entrenamiento',
+      title: 'Cada sesión, registrada',
+      subtitle: 'Registra métricas específicas de cada tipo de entrenamiento',
       accentColor: AppColors.tertiary,
       icon: Icons.fitness_center_rounded,
     ),
     _OnboardingSlide(
       title: 'Tu progreso, visible',
-      subtitle: 'Analiza tu carga, RPE y distribucion de energia',
+      subtitle: 'Analiza tu carga, RPE y distribución de energía',
       accentColor: AppColors.primary,
       icon: Icons.bar_chart_rounded,
     ),

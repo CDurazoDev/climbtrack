@@ -66,12 +66,12 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Text(
-                  'Olvidaste tu contrasena',
+                  'Olvidaste tu contraseña',
                   style: AppTypography.headingLg,
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'Ingresa tu email y te enviaremos un token para restablecerla.',
+                  'Ingresa tu correo electrónico y te enviaremos un token para restablecerla.',
                   style: AppTypography.bodyMd,
                 ),
                 const SizedBox(height: 32),
@@ -79,16 +79,16 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
-                    labelText: 'Email',
+                    labelText: 'Correo electrónico',
                     hintText: 'tu@email.com',
                   ),
                   validator: (value) {
                     final text = value?.trim() ?? '';
                     if (text.isEmpty) {
-                      return 'Ingresa tu email';
+                      return 'Ingresa tu correo electrónico';
                     }
                     if (!text.contains('@') || !text.contains('.')) {
-                      return 'Ingresa un email valido';
+                      return 'Ingresa un correo electrónico válido';
                     }
                     return null;
                   },
@@ -111,7 +111,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                 ),
                 TextButton(
                   onPressed: () => context.go('/auth/login'),
-                  child: const Text('Volver a iniciar sesion'),
+                  child: const Text('Volver a iniciar sesión'),
                 ),
               ],
             ),
