@@ -76,6 +76,43 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<Either<Failure, void>> forgotPassword({
+    required String email,
+  }) async {
+    try {
+      await _remote.forgotPassword(ForgotPasswordRequest(email: email));
+      return const Right(null);
+    } on DioException catch (error) {
+      return Left(ServerFailure(_extractMessage(error)));
+    } catch (error) {
+      return Left(ServerFailure(error.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> resetPassword({
+    required String token,
+    required String newPassword,
+    required String confirmPassword,
+  }) async {
+    try {
+      await _remote.resetPassword(
+        ResetPasswordRequest(
+          token: token,
+          newPassword: newPassword,
+          confirmPassword: confirmPassword,
+        ),
+      );
+      await _storage.clearAuthSession();
+      return const Right(null);
+    } on DioException catch (error) {
+      return Left(ServerFailure(_extractMessage(error)));
+    } catch (error) {
+      return Left(ServerFailure(error.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, UserProfileModel>> getCurrentUser() async {
     try {
       final user = await _storage.readUserProfile();

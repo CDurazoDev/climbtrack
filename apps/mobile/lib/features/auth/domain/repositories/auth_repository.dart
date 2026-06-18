@@ -18,5 +18,15 @@ abstract class AuthRepository {
 
   Future<Either<Failure, void>> logout();
 
+  Future<Either<Failure, void>> forgotPassword({
+    required String email,
+  });
+
+  Future<Either<Failure, void>> resetPassword({
+    required String token,
+    required String newPassword,
+    required String confirmPassword,
+  });
+
   Future<Either<Failure, UserProfileModel>> getCurrentUser();
 }

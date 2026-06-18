@@ -41,6 +41,22 @@ class AuthRemoteDatasource {
       options: Options(extra: const {'skipAuth': true}),
     );
   }
+
+  Future<void> forgotPassword(ForgotPasswordRequest request) async {
+    await _dio.post<void>(
+      '/auth/forgot-password',
+      data: request.toJson(),
+      options: Options(extra: const {'skipAuth': true}),
+    );
+  }
+
+  Future<void> resetPassword(ResetPasswordRequest request) async {
+    await _dio.post<void>(
+      '/auth/reset-password',
+      data: request.toJson(),
+      options: Options(extra: const {'skipAuth': true}),
+    );
+  }
 }
 
 class RegisterRequest {
@@ -107,6 +123,40 @@ class LogoutRequest {
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'refreshToken': refreshToken,
+    };
+  }
+}
+
+class ForgotPasswordRequest {
+  const ForgotPasswordRequest({
+    required this.email,
+  });
+
+  final String email;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'email': email,
+    };
+  }
+}
+
+class ResetPasswordRequest {
+  const ResetPasswordRequest({
+    required this.token,
+    required this.newPassword,
+    required this.confirmPassword,
+  });
+
+  final String token;
+  final String newPassword;
+  final String confirmPassword;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'token': token,
+      'newPassword': newPassword,
+      'confirmPassword': confirmPassword,
     };
   }
 }
