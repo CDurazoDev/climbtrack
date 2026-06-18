@@ -74,7 +74,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Inicia sesion para continuar',
+                  'Inicia sesión para continuar',
                   textAlign: TextAlign.center,
                   style: AppTypography.bodyMd.copyWith(color: AppColors.textSecondary),
                 ),
@@ -83,16 +83,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
-                    labelText: 'Email',
+                    labelText: 'Correo electrónico',
                     hintText: 'tu@email.com',
                   ),
                   validator: (value) {
                     final text = value?.trim() ?? '';
                     if (text.isEmpty) {
-                      return 'Ingresa tu email';
+                      return 'Ingresa tu correo electrónico';
                     }
                     if (!text.contains('@') || !text.contains('.')) {
-                      return 'Ingresa un email valido';
+                      return 'Ingresa un correo electrónico válido';
                     }
                     return null;
                   },
@@ -102,8 +102,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   controller: _passwordController,
                   obscureText: _obscurePassword,
                   decoration: InputDecoration(
-                    labelText: 'Contrasena',
-                    hintText: 'Minimo 8 caracteres',
+                    labelText: 'Contraseña',
+                    hintText: 'Mínimo 8 caracteres',
                     suffixIcon: IconButton(
                       onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                       icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
@@ -112,10 +112,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   validator: (value) {
                     final text = value ?? '';
                     if (text.isEmpty) {
-                      return 'Ingresa tu contrasena';
+                      return 'Ingresa tu contraseña';
                     }
                     if (text.length < 8) {
-                      return 'La contrasena debe tener al menos 8 caracteres';
+                      return 'La contraseña debe tener al menos 8 caracteres';
                     }
                     return null;
                   },
@@ -129,7 +129,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           width: 20,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : const Text('Iniciar sesion'),
+                      : const Text('Iniciar sesión'),
                 ),
                 const SizedBox(height: 20),
                 const Row(
@@ -151,11 +151,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 const SizedBox(height: 20),
                 TextButton(
                   onPressed: () => context.go('/auth/register'),
-                  child: const Text('No tienes cuenta? Registrate'),
+                  child: const Text('¿No tienes cuenta? Regístrate'),
                 ),
                 TextButton(
                   onPressed: () => context.go('/auth/forgot-password'),
-                  child: const Text('Olvidaste tu contrasena?'),
+                  child: const Text('¿Olvidaste tu contraseña?'),
                 ),
               ],
             ),

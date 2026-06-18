@@ -76,7 +76,7 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Nueva contrasena'),
+        title: const Text('Nueva contraseña'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -87,12 +87,12 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Text(
-                  'Restablecer contrasena',
+                  'Restablecer contraseña',
                   style: AppTypography.headingLg,
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'Pega el token que recibiste por correo y define una nueva contrasena.',
+                  'Pega el token que recibiste por correo y define una nueva contraseña.',
                   style: AppTypography.bodyMd,
                 ),
                 const SizedBox(height: 32),
@@ -113,7 +113,7 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
                   controller: _passwordController,
                   obscureText: _obscurePassword,
                   decoration: InputDecoration(
-                    labelText: 'Nueva contrasena',
+                    labelText: 'Nueva contraseña',
                     suffixIcon: IconButton(
                       onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                       icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
@@ -122,10 +122,10 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
                   validator: (value) {
                     final text = value ?? '';
                     if (text.isEmpty) {
-                      return 'Ingresa tu nueva contrasena';
+                      return 'Ingresa tu nueva contraseña';
                     }
                     if (text.length < 8) {
-                      return 'La contrasena debe tener al menos 8 caracteres';
+                      return 'La contraseña debe tener al menos 8 caracteres';
                     }
                     return null;
                   },
@@ -135,7 +135,7 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
                   controller: _confirmPasswordController,
                   obscureText: _obscureConfirmation,
                   decoration: InputDecoration(
-                    labelText: 'Confirmar contrasena',
+                    labelText: 'Confirmar contraseña',
                     suffixIcon: IconButton(
                       onPressed: () => setState(() => _obscureConfirmation = !_obscureConfirmation),
                       icon: Icon(_obscureConfirmation ? Icons.visibility_off : Icons.visibility),
@@ -143,10 +143,10 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
                   ),
                   validator: (value) {
                     if ((value ?? '').isEmpty) {
-                      return 'Confirma tu nueva contrasena';
+                      return 'Confirma tu nueva contraseña';
                     }
                     if (value != _passwordController.text) {
-                      return 'Las contrasenas no coinciden';
+                      return 'Las contraseñas no coinciden';
                     }
                     return null;
                   },
@@ -160,12 +160,12 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
                           width: 20,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : const Text('Actualizar contrasena'),
+                      : const Text('Actualizar contraseña'),
                 ),
                 const SizedBox(height: 12),
                 TextButton(
                   onPressed: () => context.go('/auth/login'),
-                  child: const Text('Volver a iniciar sesion'),
+                  child: const Text('Volver a iniciar sesión'),
                 ),
               ],
             ),

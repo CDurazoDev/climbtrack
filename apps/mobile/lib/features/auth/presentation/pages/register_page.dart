@@ -101,15 +101,15 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
-                    labelText: 'Email',
+                    labelText: 'Correo electrónico',
                   ),
                   validator: (value) {
                     final text = value?.trim() ?? '';
                     if (text.isEmpty) {
-                      return 'Ingresa tu email';
+                      return 'Ingresa tu correo electrónico';
                     }
                     if (!text.contains('@') || !text.contains('.')) {
-                      return 'Ingresa un email valido';
+                      return 'Ingresa un correo electrónico válido';
                     }
                     return null;
                   },
