@@ -7,11 +7,13 @@ import '../../../../core/storage/secure_storage_provider.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_remote_datasource.dart';
 import '../models/auth_tokens_model.dart';
+import '../services/session_refresh_coordinator.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-  AuthRepositoryImpl(this._remote, this._storage);
+  AuthRepositoryImpl(this._remote, this._sessionRefreshCoordinator, this._storage);
 
   final AuthRemoteDatasource _remote;
+  final SessionRefreshCoordinator _sessionRefreshCoordinator;
   final FlutterSecureStorage _storage;
 
   @override
@@ -50,6 +52,22 @@ class AuthRepositoryImpl implements AuthRepository {
       );
       await _persistSession(result);
       return Right(result);
+    } on DioException catch (error) {
+      return Left(ServerFailure(_extractMessage(error)));
+    } catch (error) {
+      return Left(ServerFailure(error.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AuthTokensModel>> refreshSession() async {
+    try {
+      final session = await _sessionRefreshCoordinator.refreshIfPossible();
+      if (session == null) {
+        return const Left(SessionExpiredFailure('Your session has expired. Please sign in again.'));
+      }
+
+      return Right(session);
     } on DioException catch (error) {
       return Left(ServerFailure(_extractMessage(error)));
     } catch (error) {

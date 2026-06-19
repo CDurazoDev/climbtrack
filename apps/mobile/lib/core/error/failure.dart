@@ -12,6 +12,10 @@ class AuthFailure extends Failure {
   const AuthFailure(super.message);
 }
 
+class SessionExpiredFailure extends AuthFailure {
+  const SessionExpiredFailure(super.message);
+}
+
 class ValidationFailure extends Failure {
   const ValidationFailure(super.message);
 }

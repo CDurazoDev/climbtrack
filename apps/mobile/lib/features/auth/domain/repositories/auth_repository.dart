@@ -16,6 +16,8 @@ abstract class AuthRepository {
     required String password,
   });
 
+  Future<Either<Failure, AuthTokensModel>> refreshSession();
+
   Future<Either<Failure, void>> logout();
 
   Future<Either<Failure, void>> forgotPassword({
