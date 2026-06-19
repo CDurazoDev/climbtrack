@@ -142,12 +142,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     Expanded(child: Divider()),
                   ],
                 ),
-                const SizedBox(height: 20),
-                OutlinedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.g_mobiledata),
-                  label: const Text('Continuar con Google'),
-                ),
+                //TODO: Implement Google Sign-In
+                // const SizedBox(height: 20),
+                // OutlinedButton.icon(
+                //   onPressed: () {},
+                //   icon: const Icon(Icons.g_mobiledata),
+                //   label: const Text('Continuar con Google'),
+                // ),
                 const SizedBox(height: 20),
                 TextButton(
                   onPressed: () => context.go('/auth/register'),

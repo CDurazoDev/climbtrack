@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../features/auth/presentation/providers/session_providers.dart';
 import '../config/app_config.dart';
 import '../storage/secure_storage_provider.dart';
 
@@ -11,6 +12,7 @@ final dioProvider = Provider<Dio>((ref) {
   }
 
   final storage = ref.read(secureStorageProvider);
+  final sessionRefreshCoordinator = ref.read(sessionRefreshCoordinatorProvider);
   final dio = Dio(
     BaseOptions(
       baseUrl: AppConfig.apiBaseUrl,
@@ -32,6 +34,44 @@ final dioProvider = Provider<Dio>((ref) {
           }
         }
         handler.next(options);
+      },
+      onError: (error, handler) async {
+        final requestOptions = error.requestOptions;
+        final skipAuth = requestOptions.extra['skipAuth'] == true;
+        final alreadyRetried = requestOptions.extra['authRetry'] == true;
+        final isUnauthorized = error.response?.statusCode == 401;
+
+        if (skipAuth || alreadyRetried || !isUnauthorized) {
+          handler.next(error);
+          return;
+        }
+
+        try {
+          final session = await sessionRefreshCoordinator.refreshIfPossible();
+          if (session == null) {
+            handler.next(error);
+            return;
+          }
+
+          final headers = Map<String, dynamic>.from(requestOptions.headers);
+          headers['Authorization'] = 'Bearer ${session.accessToken}';
+
+          final extra = Map<String, dynamic>.from(requestOptions.extra);
+          extra['authRetry'] = true;
+
+          final response = await dio.fetch<dynamic>(
+            requestOptions.copyWith(
+              headers: headers,
+              extra: extra,
+            ),
+          );
+
+          handler.resolve(response);
+        } on DioException catch (refreshError) {
+          handler.next(refreshError);
+        } catch (_) {
+          handler.next(error);
+        }
       },
     ),
   );

@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/error/failure.dart';
 import '../../../../core/storage/secure_storage_provider.dart';
 import '../../data/models/auth_tokens_model.dart';
 import 'auth_providers.dart';
+import 'session_providers.dart';
 
 sealed class AuthState {
   const AuthState();
@@ -72,15 +74,54 @@ extension AuthStateX on AuthState {
 class AuthNotifier extends AsyncNotifier<AuthState> {
   @override
   Future<AuthState> build() async {
+    ref.watch(sessionVersionProvider);
+
     final storage = ref.read(secureStorageProvider);
     final accessToken = await storage.readAccessToken();
+    final refreshToken = await storage.readRefreshToken();
     final user = await storage.readUserProfile();
 
     if (accessToken == null || accessToken.isEmpty || user == null) {
       return const AuthState.unauthenticated();
     }
 
-    return AuthState.authenticated(user);
+    if (refreshToken == null || refreshToken.isEmpty) {
+      return AuthState.authenticated(user);
+    }
+
+    final refreshResult = await ref.read(authRepositoryProvider).refreshSession();
+    return refreshResult.fold(
+      (failure) {
+        if (failure is SessionExpiredFailure) {
+          return const AuthState.unauthenticated();
+        }
+
+        return AuthState.authenticated(user);
+      },
+      (session) => AuthState.authenticated(session.user),
+    );
+  }
+
+  Future<void> refreshSession() async {
+    final currentUser = await ref.read(authRepositoryProvider).getCurrentUser();
+    final fallbackUser = currentUser.fold((_) => null, (profile) => profile);
+
+    state = const AsyncValue.data(AuthState.loading());
+    final result = await ref.read(authRepositoryProvider).refreshSession();
+    state = result.fold(
+      (failure) {
+        if (failure is SessionExpiredFailure) {
+          return const AsyncValue.data(AuthState.unauthenticated());
+        }
+
+        if (fallbackUser != null) {
+          return AsyncValue.data(AuthState.authenticated(fallbackUser));
+        }
+
+        return AsyncValue.data(AuthState.error(failure.message));
+      },
+      (session) => AsyncValue.data(AuthState.authenticated(session.user)),
+    );
   }
 
   Future<void> login(String email, String password) async {

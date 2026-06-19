@@ -5,6 +5,7 @@ import '../../../../core/storage/secure_storage_provider.dart';
 import '../../data/datasources/auth_remote_datasource.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../domain/repositories/auth_repository.dart';
+import 'session_providers.dart';
 
 final authRemoteDatasourceProvider = Provider<AuthRemoteDatasource>((ref) {
   return AuthRemoteDatasource(ref.read(dioProvider));
@@ -13,6 +14,7 @@ final authRemoteDatasourceProvider = Provider<AuthRemoteDatasource>((ref) {
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepositoryImpl(
     ref.read(authRemoteDatasourceProvider),
+    ref.read(sessionRefreshCoordinatorProvider),
     ref.read(secureStorageProvider),
   );
 });
