@@ -91,6 +91,13 @@ artifacts/
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
 
+# Local app settings (do not commit secrets)
+apps/api/ClimbTrack.Api/appsettings.Development.json
+apps/mobile/.env
+apps/mobile/.env.*
+logs/
+**/logs/
+
 # StyleCop
 StyleCopReport.xml
 
@@ -427,3 +434,13 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Flutter / Dart
+.dart_tool/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+.metadata
+build/
+coverage/
+**/build/
