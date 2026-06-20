@@ -1,5 +1,7 @@
 using System.Reflection;
+using AutoMapper;
 using ClimbTrack.Application.Common.Behaviors;
+using ClimbTrack.Application.Common.Mappings;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +16,7 @@ public static class DependencyInjection
 
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly));
         RegisterValidators(services, assembly);
+        services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>(), assembly);
 
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ExceptionHandlingBehavior<,>));
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
