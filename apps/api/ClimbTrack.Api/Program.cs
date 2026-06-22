@@ -8,9 +8,13 @@ using ClimbTrack.Api.Endpoints.SessionLogs;
 using ClimbTrack.Api.Endpoints.Stats;
 using ClimbTrack.Api.Endpoints.Users;
 using ClimbTrack.Application;
+using ClimbTrack.Application.Features.Plans.Jobs;
+using ClimbTrack.Domain.Interfaces;
 using ClimbTrack.Infrastructure;
 using ClimbTrack.Infrastructure.Persistence;
 using ClimbTrack.Infrastructure.Persistence.Seeds;
+using Hangfire;
+using Hangfire.Server;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
@@ -30,6 +34,8 @@ if (string.IsNullOrWhiteSpace(jwtSecret) || jwtSecret == "CHANGE_ME")
 builder.Services.AddOpenApi();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, HttpContextCurrentUserService>();
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -48,6 +54,17 @@ builder.Services
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+var hangfireServer = new BackgroundJobServer(
+    new BackgroundJobServerOptions(),
+    app.Services.GetRequiredService<JobStorage>());
+app.Lifetime.ApplicationStopping.Register(hangfireServer.Dispose);
+
+var recurringJobManager = app.Services.GetRequiredService<IRecurringJobManager>();
+recurringJobManager.AddOrUpdate<RecalculateWeekProgressJob>(
+    "recalculate-week-progress",
+    job => job.ExecuteAsync(CancellationToken.None),
+    Cron.Daily(3));
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

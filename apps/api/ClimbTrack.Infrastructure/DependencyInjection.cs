@@ -4,8 +4,11 @@ using ClimbTrack.Domain.Interfaces;
 using ClimbTrack.Infrastructure.Auth;
 using ClimbTrack.Infrastructure.Messaging;
 using ClimbTrack.Infrastructure.Persistence;
+using ClimbTrack.Infrastructure.Persistence.Connections;
 using ClimbTrack.Infrastructure.Persistence.Interceptors;
 using ClimbTrack.Infrastructure.Services;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,10 +31,22 @@ public static class DependencyInjection
         services.AddScoped<IPasswordResetNotificationService, PasswordResetNotificationService>();
         services.AddScoped<IEmailSender, SmtpEmailSender>();
         services.AddScoped<RlsInterceptor>();
+        services.AddScoped<ISqlConnectionFactory>(sp =>
+            new NpgsqlSqlConnectionFactory(connectionString, sp.GetRequiredService<ICurrentUserService>()));
+        var hangfireOptions = new PostgreSqlStorageOptions
+        {
+            PrepareSchemaIfNecessary = true
+        };
+        GlobalConfiguration.Configuration.UsePostgreSqlStorage(
+            options => options.UseNpgsqlConnection(connectionString, _ => { }),
+            hangfireOptions);
+        services.AddSingleton<JobStorage>(_ => JobStorage.Current);
+        services.AddSingleton<IRecurringJobManager>(sp =>
+            new RecurringJobManager(sp.GetRequiredService<JobStorage>()));
 
         services.AddDbContext<ClimbTrackDbContext>((sp, options) =>
         {
-            options.UseNpgsql(configuration.GetConnectionString("PostgreSQL"));
+            options.UseNpgsql(connectionString);
             options.AddInterceptors(sp.GetRequiredService<RlsInterceptor>());
         });
 

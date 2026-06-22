@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -9,6 +9,10 @@ import '../../features/auth/presentation/pages/forgot_password_page.dart';
 import '../../features/auth/presentation/pages/reset_password_page.dart';
 import '../../features/auth/presentation/providers/auth_state.dart';
 import '../../features/dashboard/presentation/pages/dashboard_page.dart';
+import '../../features/dashboard/presentation/pages/home_shell_page.dart';
+import '../../features/plan/presentation/pages/plan_page.dart';
+import '../../features/profile/presentation/pages/profile_page.dart';
+import '../../features/session_log/presentation/pages/session_log_page.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final routerNotifier = _RouterNotifier();
@@ -67,9 +71,54 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           initialToken: state.uri.queryParameters['token'] ?? '',
         ),
       ),
+      ShellRoute(
+        builder: (context, state, child) => HomeShellPage(
+          location: state.uri.path,
+          child: child,
+        ),
+        routes: [
+          GoRoute(
+            path: '/home/dashboard',
+            builder: (context, state) => const DashboardPage(),
+          ),
+          GoRoute(
+            path: '/home/plan',
+            builder: (context, state) => const PlanPage(),
+          ),
+        ],
+      ),
       GoRoute(
-        path: '/home/dashboard',
-        builder: (context, state) => const DashboardPage(),
+        path: '/profile',
+        builder: (context, state) => const ProfilePage(),
+      ),
+      GoRoute(
+        path: '/session-log/:weekId/:dayOfWeek',
+        pageBuilder: (context, state) => CustomTransitionPage<void>(
+          key: state.pageKey,
+          opaque: false,
+          barrierDismissible: false,
+          barrierColor: Colors.transparent,
+          child: SessionLogPage(
+            weekId: int.tryParse(state.pathParameters['weekId'] ?? '') ?? 0,
+            dayOfWeek: int.tryParse(state.pathParameters['dayOfWeek'] ?? '') ?? 0,
+          ),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            final offsetAnimation = Tween<Offset>(
+              begin: const Offset(0, 1),
+              end: Offset.zero,
+            ).animate(
+              CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
+            );
+
+            return SlideTransition(
+              position: offsetAnimation,
+              child: FadeTransition(
+                opacity: animation,
+                child: child,
+              ),
+            );
+          },
+        ),
       ),
     ],
   );

@@ -30,11 +30,11 @@ public class ExceptionHandlingBehavior<TRequest, TResponse> : IPipelineBehavior<
         catch (Exception ex)
         {
             _logger.LogError(ex, "Unhandled exception while processing {RequestName}", typeof(TRequest).Name);
-            return CreateFailureResponse();
+            return TryCreateFailureResponse(ex);
         }
     }
 
-    private static TResponse CreateFailureResponse()
+    private static TResponse TryCreateFailureResponse(Exception exception)
     {
         const string error = "An unexpected server error occurred. Please try again.";
 
@@ -58,6 +58,6 @@ public class ExceptionHandlingBehavior<TRequest, TResponse> : IPipelineBehavior<
             return (TResponse)method.Invoke(null, [error])!;
         }
 
-        throw new InvalidOperationException("ExceptionHandlingBehavior requires Result response types.");
+        throw exception;
     }
 }
