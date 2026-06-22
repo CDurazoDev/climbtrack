@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -93,9 +93,31 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/session-log/:weekId/:dayOfWeek',
-        builder: (context, state) => SessionLogPage(
-          weekId: int.tryParse(state.pathParameters['weekId'] ?? '') ?? 0,
-          dayOfWeek: int.tryParse(state.pathParameters['dayOfWeek'] ?? '') ?? 0,
+        pageBuilder: (context, state) => CustomTransitionPage<void>(
+          key: state.pageKey,
+          opaque: false,
+          barrierDismissible: false,
+          barrierColor: Colors.transparent,
+          child: SessionLogPage(
+            weekId: int.tryParse(state.pathParameters['weekId'] ?? '') ?? 0,
+            dayOfWeek: int.tryParse(state.pathParameters['dayOfWeek'] ?? '') ?? 0,
+          ),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            final offsetAnimation = Tween<Offset>(
+              begin: const Offset(0, 1),
+              end: Offset.zero,
+            ).animate(
+              CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
+            );
+
+            return SlideTransition(
+              position: offsetAnimation,
+              child: FadeTransition(
+                opacity: animation,
+                child: child,
+              ),
+            );
+          },
         ),
       ),
     ],

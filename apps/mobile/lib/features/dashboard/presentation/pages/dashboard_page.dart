@@ -47,15 +47,25 @@ class DashboardPage extends ConsumerWidget {
                   const EdgeInsets.fromLTRB(kPaddingH, kGapMd, kPaddingH, 0),
               child: todayAsync.when(
                 data: (session) {
-                  if (session == null) {
-                    return const _RestDayCard();
+                  if (session != null) {
+                    return _TodaySessionCard(
+                      session: session,
+                      planWeekId: weekAsync.valueOrNull?.id,
+                      dayOfWeek: _resolveTodayDayOfWeek(weekAsync.valueOrNull),
+                    );
                   }
 
-                  return _TodaySessionCard(
-                    session: session,
-                    planWeekId: weekAsync.valueOrNull?.id,
-                    dayOfWeek: _resolveTodayDayOfWeek(weekAsync.valueOrNull),
-                  );
+                  final plannedSession =
+                      _resolvePlannedTodaySession(weekAsync.valueOrNull);
+                  if (plannedSession != null) {
+                    return _PlannedTodaySessionCard(
+                      session: plannedSession,
+                      planWeekId: weekAsync.valueOrNull?.id,
+                      dayOfWeek: _resolveTodayDayOfWeek(weekAsync.valueOrNull),
+                    );
+                  }
+
+                  return const _RestDayCard();
                 },
                 loading: () => const _SessionCardSkeleton(),
                 error: (error, _) => _ErrorCard(message: error.toString()),
@@ -85,6 +95,28 @@ class DashboardPage extends ConsumerWidget {
 
     final currentIndex = week.days.indexWhere((day) => day.state == 'today');
     return currentIndex >= 0 ? currentIndex : todayIndex;
+  }
+
+  _PlannedTodaySession? _resolvePlannedTodaySession(PlanWeekDto? week) {
+    if (week == null) {
+      return null;
+    }
+
+    final dayIndex = _resolveTodayDayOfWeek(week);
+    if (dayIndex < 0 || dayIndex >= week.days.length) {
+      return null;
+    }
+
+    final day = week.days[dayIndex];
+    if (day.state == 'rest' || (day.sessionTypeId?.isEmpty ?? true)) {
+      return null;
+    }
+
+    return _PlannedTodaySession(
+      sessionTypeId: day.sessionTypeId ?? '',
+      sessionTypeName: day.sessionTypeName ?? 'Sesión',
+      sessionColorHex: day.sessionColorHex ?? '#5C5C5C',
+    );
   }
 }
 
@@ -283,6 +315,80 @@ class _TodaySessionCard extends StatelessWidget {
                 context.push('/session-log/$planWeekId/$dayOfWeek');
               },
               child: Text(buttonLabel),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PlannedTodaySessionCard extends StatelessWidget {
+  const _PlannedTodaySessionCard({
+    required this.session,
+    required this.planWeekId,
+    required this.dayOfWeek,
+  });
+
+  final _PlannedTodaySession session;
+  final int? planWeekId;
+  final int dayOfWeek;
+
+  @override
+  Widget build(BuildContext context) {
+    final sessionMeta =
+        _sessionMeta(session.sessionTypeId, session.sessionTypeName);
+    final sessionColor =
+        session.sessionColorHex.toAppColor(fallback: AppColors.primary);
+
+    return Container(
+      decoration: AppDecorations.sessionCard(sessionColor),
+      padding: const EdgeInsets.all(kGapLg),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              _EnergyBadge(
+                label: sessionMeta.energySystem.toUpperCase(),
+                color: sessionColor,
+              ),
+              const Spacer(),
+              _LoadIndicator(
+                level: sessionMeta.loadLevel,
+                color: sessionColor,
+              ),
+            ],
+          ),
+          const SizedBox(height: kGapMd),
+          Text(
+            session.sessionTypeName,
+            style: AppTypography.headingLg.copyWith(fontSize: 22),
+          ),
+          const SizedBox(height: kGapSm),
+          Text(
+            sessionMeta.description,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: AppTypography.bodySm.copyWith(fontSize: 13),
+          ),
+          const SizedBox(height: kGapLg),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                if (planWeekId == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('No hay semana activa disponible todavía.'),
+                    ),
+                  );
+                  return;
+                }
+
+                context.push('/session-log/$planWeekId/$dayOfWeek');
+              },
+              child: const Text('Iniciar sesión'),
             ),
           ),
         ],
@@ -666,4 +772,16 @@ class _SessionMeta {
   final String energySystem;
   final int loadLevel;
   final String description;
+}
+
+class _PlannedTodaySession {
+  const _PlannedTodaySession({
+    required this.sessionTypeId,
+    required this.sessionTypeName,
+    required this.sessionColorHex,
+  });
+
+  final String sessionTypeId;
+  final String sessionTypeName;
+  final String sessionColorHex;
 }
