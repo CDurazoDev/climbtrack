@@ -2,6 +2,11 @@ using System.Security.Claims;
 using System.Text;
 using ClimbTrack.Api.Configuration;
 using ClimbTrack.Api.Endpoints.Auth;
+using ClimbTrack.Api.Endpoints.Catalogs;
+using ClimbTrack.Api.Endpoints.CustomSessions;
+using ClimbTrack.Api.Endpoints.SessionLogs;
+using ClimbTrack.Api.Endpoints.Stats;
+using ClimbTrack.Api.Endpoints.Users;
 using ClimbTrack.Application;
 using ClimbTrack.Infrastructure;
 using ClimbTrack.Infrastructure.Persistence;
@@ -93,5 +98,10 @@ app.UseAuthorization();
 
 app.MapGet("/health", () => Results.Ok(new { status = "healthy" })).AllowAnonymous();
 app.MapGroup("/auth").MapAuth();
+app.MapGroup("/catalogs").MapCatalogs();
+app.MapGroup("/custom-sessions").MapCustomSessions();
+app.MapGroup("/session-logs").MapSessionLogs();
+app.MapGroup("/stats").MapStats();
+app.MapGroup("/users").MapUsers();
 
 app.Run();

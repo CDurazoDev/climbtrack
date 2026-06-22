@@ -19,7 +19,8 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.TryAddScoped<ICurrentUserService, AnonymousCurrentUserService>();
+        services.AddHttpContextAccessor();
+        services.TryAddScoped<ICurrentUserService, HttpContextCurrentUserService>();
         services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ClimbTrackDbContext>());
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<ITokenService, TokenService>();

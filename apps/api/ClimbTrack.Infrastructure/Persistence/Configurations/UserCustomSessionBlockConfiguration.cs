@@ -15,6 +15,7 @@ public class UserCustomSessionBlockConfiguration : IEntityTypeConfiguration<User
         builder.Property(x => x.UserCustomSessionId).HasColumnName("user_custom_session_id").IsRequired();
         builder.Property(x => x.Name).HasColumnName("name").HasMaxLength(50).IsRequired();
         builder.Property(x => x.SortOrder).HasColumnName("sort_order").IsRequired();
+        builder.Property(x => x.ItemsJson).HasColumnName("items_json").HasColumnType("text").IsRequired();
 
         builder.HasIndex(x => new { x.UserCustomSessionId, x.SortOrder }).IsUnique();
     }

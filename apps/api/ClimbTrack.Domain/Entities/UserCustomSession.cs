@@ -28,5 +28,27 @@ public class UserCustomSession
     public DateTime CreatedAt { get; private set; }
     public DateTime? DeletedAt { get; private set; }
     public ICollection<UserCustomSessionBlock> Blocks { get; private set; } = [];
+
+    public void Update(string name, string colorHex, int loadLevel, string? description)
+    {
+        Name = name;
+        ColorHex = colorHex;
+        LoadLevel = loadLevel;
+        Description = description;
+    }
+
+    public void ReplaceBlocks(IEnumerable<UserCustomSessionBlock> blocks)
+    {
+        Blocks.Clear();
+        foreach (var block in blocks)
+        {
+            Blocks.Add(block);
+        }
+    }
+
+    public void SoftDelete()
+    {
+        DeletedAt = DateTime.UtcNow;
+    }
 }
 

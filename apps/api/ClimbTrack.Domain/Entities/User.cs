@@ -56,5 +56,10 @@ public class User
     {
         PasswordHash = passwordHash;
     }
+
+    public void SetPreferredLocale(string preferredLocale)
+    {
+        PreferredLocale = preferredLocale;
+    }
 }
 

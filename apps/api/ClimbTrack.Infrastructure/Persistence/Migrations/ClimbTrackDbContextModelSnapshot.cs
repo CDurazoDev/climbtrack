@@ -594,6 +594,11 @@ namespace ClimbTrack.Infrastructure.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<string>("ItemsJson")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("items_json");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
