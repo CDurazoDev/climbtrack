@@ -3,6 +3,8 @@ using System.Text;
 using ClimbTrack.Api.Configuration;
 using ClimbTrack.Api.Endpoints.Auth;
 using ClimbTrack.Api.Endpoints.Plans;
+using ClimbTrack.Api.Endpoints.SessionLogs;
+using ClimbTrack.Api.Endpoints.Stats;
 using ClimbTrack.Application;
 using ClimbTrack.Infrastructure;
 using ClimbTrack.Infrastructure.Persistence;
@@ -95,5 +97,7 @@ app.UseAuthorization();
 app.MapGet("/health", () => Results.Ok(new { status = "healthy" })).AllowAnonymous();
 app.MapGroup("/auth").MapAuth();
 app.MapGroup("/plans").MapPlans();
+app.MapGroup("/session-logs").MapSessionLogs();
+app.MapGroup("/stats").MapStats();
 
 app.Run();
