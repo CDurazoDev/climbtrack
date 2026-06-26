@@ -16,6 +16,7 @@ public interface IApplicationDbContext
     DbSet<UserPlan> UserPlans { get; }
     DbSet<UserPlanWeek> UserPlanWeeks { get; }
     DbSet<UserSessionLog> UserSessionLogs { get; }
+    DbSet<SessionLogMetric> SessionLogMetrics { get; }
     DbSet<PlanTemplate> PlanTemplates { get; }
     DbSet<PlanTemplateDay> PlanTemplateDays { get; }
     DatabaseFacade Database { get; }

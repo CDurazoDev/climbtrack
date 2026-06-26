@@ -41,5 +41,22 @@ public class UserSessionLog
     public DateTime? UpdatedAt { get; private set; }
     public SessionType SessionType { get; private set; } = null!;
     public ICollection<SessionLogMetric> Metrics { get; private set; } = [];
+
+    public void UpdateDraft(int? rpe, int? durationMin, string? notes)
+    {
+        Rpe = rpe;
+        DurationMin = durationMin;
+        Notes = notes;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void Complete(int rpe, int durationMin, string? notes)
+    {
+        IsDone = true;
+        Rpe = rpe;
+        DurationMin = durationMin;
+        Notes = notes;
+        UpdatedAt = DateTime.UtcNow;
+    }
 }
 

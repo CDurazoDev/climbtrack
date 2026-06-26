@@ -18,4 +18,10 @@ public class SessionLogMetric
     public string MetricValue { get; private set; } = null!;
     public string? MetricUnit { get; private set; }
     public UserSessionLog SessionLog { get; private set; } = null!;
+
+    public void Update(string metricValue, string? metricUnit)
+    {
+        MetricValue = metricValue;
+        MetricUnit = metricUnit;
+    }
 }
