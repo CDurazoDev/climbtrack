@@ -95,6 +95,8 @@ ScaffoldingReadMe.txt
 apps/api/ClimbTrack.Api/appsettings.Development.json
 apps/mobile/.env
 apps/mobile/.env.*
+climbtrack-agents/
+apps/api/postman/
 logs/
 **/logs/
 
